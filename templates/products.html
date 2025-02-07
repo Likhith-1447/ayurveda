@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Products</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylcss/products.css') }}">
+    <style>
+       body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #e0f2e9; /* Light green background */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1em 2em;
+        background: rgba(0, 0, 0, 0.7);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 10;
+      }
+
+      .navbar .logo img {
+        height: 50px;
+      }
+
+      .navbar .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 1em;
+        margin: 0;
+        padding: 0;
+      }
+
+      .navbar .nav-links li {
+        display: inline;
+      }
+
+      .navbar .nav-links a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1.2em;
+        transition: color 0.3s;
+        padding: 0.5em 1em;
+      }
+
+      .navbar .nav-links a:hover {
+        color: #ffd700; /* Bright yellow */
+      }
+
+      .profile-circle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #007bff; /* Blue background */
+        color: white;
+        font-size: 16px;
+        margin-left: 10px; /* Adjust margin as needed */
+      }
+
+      .profile-circle:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+      }
+
+      .navbar .profile-circle a {
+        color: white;
+        text-decoration: none;
+      }
+
+      .navbar .profile-circle a:hover {
+        text-decoration: underline;
+      }
+
+      .navbar .cart a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5em 1em;
+        border: 2px solid #ffd700; /* Bright yellow border */
+        border-radius: 5px;
+        transition: background-color 0.3s, transform 0.3s;
+        height: 50px;
+      }
+
+      .navbar .cart a:hover {
+        background-color: #ffd700; /* Bright yellow background */
+        transform: scale(1.1);
+      }
+
+      .navbar .cart img {
+        height: 100%;
+        width: auto;
+      }
+
+      .header {
+        height: 30%;
+        width: 100%;
+        background-color: #3b8194; /* Dark green header */
+        padding: 20px 0;
+        border-bottom: 1px solid #2e7049; /* Dark green border */
+        display: flex;
+        justify-content: center;
+        margin-top: 100px; /* Space below navbar */
+      }
+
+      .search-container {
+        display: flex;
+        height: 25%;
+        width: 50%;
+      }
+
+      .search-bar {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #1e7e79; /* Dark green border */
+        border-radius: 2px;
+        outline: none;
+      }
+
+        #products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .product-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .product-card h2 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .product-card p {
+            font-size: 16px;
+            color: #888;
+        }
+
+        .product-card button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .product-card button:hover {
+            background-color: #218838;
+        }
+
+        .cart-message {
+    position: fixed;
+    bottom: 20px; /* Distance from the bottom of the viewport */
+    left: 50%;
+    transform: translateX(-50%); /* Center horizontally */
+    background-color: #28a745; /* Green background */
+    color: #fff; /* White text */
+    padding: 15px 25px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000; /* Ensure it's above other content */
+    display: none; /* Initially hidden */
+    transition: opacity 0.5s, transform 0.5s; /* Smooth fade and slide-in effect */
+}
+
+.cart-message.show {
+    display: block; /* Show when active */
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px); /* Slightly slide up on show */
+}
+
+.cart-message.hide {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px); /* Slightly slide down on hide */
+}
+
+
+        .footer {
+            padding: 20px;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-col {
+            margin-bottom: 20px;
+        }
+
+        .footer-col img {
+            max-width: 150px;
+            margin-right: 10px;
+        }
+
+        .footer-col ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .footer-col li {
+            margin-bottom: 10px;
+        }
+
+        .Copyright {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+    <nav class="navbar">
+      <div class="logo">
+        <img
+          src="{{ url_for('static', filename='logo.png') }}"
+          alt="Ayurvedic Logo"
+        />
+      </div>
+      <ul class="nav-links">
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('products') }}">Products</a></li>
+        <li><a href="{{ url_for('remedies') }}">Remedies</a></li>
+        <li><a href="{{ url_for('qa') }}">Chat us</a></li>
+        <li><a href="{{ url_for('contact') }}">Skin Click</a></li>
+        {% if 'user' in session %}
+        <div class="profile-circle">
+          <a href="{{ url_for('profile') }}">{{ session['user'][0] }}</a>
+        </div>
+        {% else %}
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        <li><a href="{{ url_for('signup') }}">Sign up</a></li>
+        {% endif %}
+      </ul>
+      <div class="cart">
+        <a href="{{ url_for('cart') }}">
+          <img
+            src="{{ url_for('static', filename='cart-icon.png') }}"
+            alt="Cart"
+          />
+        </a>
+      </div>
+    </nav>
+  </head>
+  <body>
+    <header class="header">
+      <div class="search-container">
+        <input
+          type="text"
+          class="search-bar"
+          id="searchBar"
+          placeholder="Search for a remedy..."
+        />
+      </div>
+    </header>
+    <main>
+        <section id="products">
+            <div class="product-card" data-name="Anti-ringworm Healing Cream For Anti-fungal Action">
+                <img src="{{ url_for('static', filename='Anti-ringworm Healing Cream For Anti-fungal Action.webp') }}" alt="Anti-ringworm Healing Cream For Anti-fungal Action">
+                <h2>Anti-ringworm Healing Cream - Tinea Ringworm Candidiasis</h2>
+                <p>Price: Rs. 199</p>
+                <button>Add to Cart</button>
+            </div>
+            <div class="product-card" data-name="Atrimed Rilanx 30s (Pack Of 3) - Melanoma">
+                <img src="{{ url_for('static', filename='Atrimed Rilanx 30s (Pack Of 3) - Melanoma.webp') }}" alt="Atrimed Rilanx 30s (Pack Of 3) - Melanoma">
+                <h2>Atrimed Rilanx - Melanoma</h2>
+                <p>Price: Rs. 349</p>
+                <button>Add to Cart</button>
+            </div>
+            <div class="product-card" data-name="Benign Keratosis">
+              <img src="{{ url_for('static', filename='Benign Keratosis.webp') }}" alt="Benign Keratosis" />
+              <h2>Benign Keratosis Cream</h2>
+              <p>Price: Rs. 299</p>
+              <button>Add to Cart</button>
+          </div>
+          <div
+              class="product-card"
+              data-name="Dhootapapeshwar Chandrakala Rasa Tablet - 30 Tablets - Basal Cell Carcinoma"
+          >
+              <img
+                  src="{{ url_for('static', filename='Dhootapapeshwar Chandrakala Rasa Tablet - 30 Tablets - Basal Cell Carcinoma.webp') }}"
+                  alt="Dhootapapeshwar Chandrakala Rasa Tablet - 30 Tablets - Basal Cell Carcinoma"
+              />
+              <h2>Dhootapapeshwar Chandrakala - Basal Cell Carcinoma</h2>
+              <p>Price: Rs. 249</p>
+              <button>Add to Cart</button>
+          </div>
+          <div class="product-card" data-name="Divya Melanogri - Melanoma">
+              <img
+                  src="{{ url_for('static', filename='Divya Melanogri - Melanoma.webp') }}"
+                  alt="Divya Melanogri - Melanoma"
+              />
+              <h2>Divya Melanogri - Melanoma</h2>
+              <p>Price: Rs. 199</p>
+              <button>Add to Cart</button>
+          </div>
+          <div class="product-card" data-name="Dr. Reckeweg R188 Warts Drops 22 M">
+              <img
+                  src="{{ url_for('static', filename='Dr. Reckeweg R188 Warts Drops 22 M.webp') }}"
+                  alt="Dr. Reckeweg R188 Warts Drops 22 M"
+              />
+              <h2>Dr. Reckeweg R188 - Warts Molluscum</h2>
+              <p>Price: Rs. 189</p>
+              <button>Add to Cart</button>
+          </div>
+          <div class="product-card" data-name="Eczema Cream">
+              <img src="{{ url_for('static', filename='eczema cream.webp') }}" alt="Eczema Cream" />
+              <h2>Eczema Cream</h2>
+              <p>Price: Rs. 249</p>
+              <button>Add to Cart</button>
+          </div>
+          <div
+              class="product-card"
+              data-name="Jathyadi Ghritham 10 Gm- Benign Keratosis"
+          >
+              <img
+                  src="{{ url_for('static', filename='Jathyadi Ghritham 10 Gm- Benign Keratosis.webp') }}"
+                  alt="Jathyadi Ghritham 10 Gm- Benign Keratosis"
+              />
+              <h2>Jathyadi Ghritham - Benign Keratosis</h2>
+              <p>Price: Rs. 279</p>
+              <button>Add to Cart</button>
+          </div>
+          <div
+              class="product-card"
+              data-name="Kottakkal Ayruveda Ayyappala Keratailam - Seborrheic Keratoses"
+          >
+              <img
+                  src="{{ url_for('static', filename='Kottakkal Ayruveda Ayyappala Keratailam - seborrheic Keratoses.webp') }}"
+                  alt="Kottakkal Ayruveda Ayyappala Keratailam - seborrheic Keratoses"
+              />
+              <h2>Kottakkal Ayruveda Ayyappala Keratailam - Atopic Dermatitis</h2>
+              <p>Price: Rs. 159</p>
+              <button>Add to Cart</button>
+          </div>
+          <div
+              class="product-card"
+              data-name="Kottakkal Ayurveda Vibha Skin Care Cream- Seborrheic Keratosis"
+          >
+              <img
+                  src="{{ url_for('static', filename='Kottakkal Ayurveda Vibha Skin Care Cream- seborrheic keratosis.webp') }}"
+                  alt="Kottakkal Ayurveda Vibha Skin Care Cream- seborrheic keratosis"
+              />
+              <h2>Kottakkal Ayurveda Vibha Cream - Seborrheic Keratoses</h2>
+              <p>Price: Rs. 179</p>
+              <button>Add to Cart</button>
+          </div>
+          <div class="product-card" data-name="NVM Tablet 30's- Melanocytic Nevi">
+              <img
+                  src="{{ url_for('static', filename='NVM Tablet 30\'s- Melanocytic Nevi.webp') }}"
+                  alt="NVM Tablet 30's- Melanocytic Nevi"
+              />
+              <h2>NVM Tablet - Melanocytic Nevi</h2>
+              <p>Price: Rs. 209</p>
+              <button>Add to Cart</button>
+          </div>
+          <div
+              class="product-card"
+              data-name="Oleander's Oil for Psoriasis, Eczema, Atopic Dermatitis"
+          >
+              <img
+                  src="{{ url_for('static', filename='Oleander\'s Oil for Psoriasis, Eczema, Atopic Dermatitis.webp') }}"
+                  alt="Oleander's Oil for Psoriasis, Eczema, Atopic Dermatitis"
+              />
+              <h2>Oleander's Oil - Atopic Dermatitis Psoriasis,Eczema</h2>
+              <p>Price: Rs. 299</p>
+              <button>Add to Cart</button>
+          </div>
+          <div
+              class="product-card"
+              data-name="Psoriasis DH Herbal Supplement Capsules 60 Caps Jar"
+          >
+              <img
+                  src="{{ url_for('static', filename='Psoriasis DH Herbal Supplement Capsules 60 Caps Jar.webp') }}"
+                  alt="Psoriasis DH Herbal Supplement Capsules 60 Caps Jar"
+              />
+              <h2>Psoriasis DH Herbal Supplement</h2>
+              <p>Price: Rs. 399</p>
+              <button>Add to Cart</button>
+          </div>
+          <div
+              class="product-card"
+              data-name="Sebifin Cream - Seborrheic Keratoses"
+          >
+              <img
+                  src="{{ url_for('static', filename='Sebifin Cream - Seborrheic Keratoses.webp') }}"
+                  alt="Sebifin Cream - Seborrheic Keratoses"
+              />
+              <h2>Sebifin Cream - Seborrheic Keratoses</h2>
+              <p>Price: Rs. 189</p>
+              <button>Add to Cart</button>
+          </div>
+          
+          <div class="product-card" data-name="VedicDerm Psoriasis Cream">
+              <img
+                  src="{{ url_for('static', filename='VedicDerm Psoriasis Cream.webp') }}"
+                  alt="VedicDerm Psoriasis Cream"
+              />
+              <h2>VedicDerm Psoriasis Cream</h2>
+              <p>Price: Rs. 349</p>
+              <button>Add to Cart</button>
+          </div>
+          <div
+              class="product-card"
+              data-name="Vidhmaan Ayurveda Fungal Malam Ointment For Ringworm, Itching, Eczema"
+          >
+              <img
+                  src="{{ url_for('static', filename='vidhmaan ayurveda Fungal Malam Ointment For Ringworm,itching, Eczema.webp') }}"
+                  alt="Vidhmaan Ayurveda Fungal Malam Ointment For Ringworm,itching, Eczema"
+              />
+              <h2>Vidhmaan Ayurveda Fungal Malam - Tinea Ringworm Candidiasis,Eczema</h2>
+              <p>Price: Rs. 129</p>
+              <button>Add to Cart</button>
+          </div>
+          <div class="product-card" data-name="Warts Removal">
+              <img src="{{ url_for('static', filename='Warts removal.webp') }}" alt="Warts Removal" />
+              <h2>Warts Removal - Warts Molluscum</h2>
+              <p>Price: Rs. 199</p>
+              <button>Add to Cart</button>
+          </div>
+          <div class="product-card" data-name="Zalim Lotion For Ringworm">
+              <img
+                  src="{{ url_for('static', filename='Zalim Lotion For Ringworm.webp') }}"
+                  alt="Zalim Lotion For Ringworm"
+              />
+              <h2>Zalim Lotion - Warts Molluscum</h2>
+              <p>Price: Rs. 179</p>
+              <button>Add to Cart</button>
+          </div>
+          <div
+              class="product-card"
+              data-name="Zandu Punarnava Mandur (40tab) - Melanoma"
+          >
+              <img
+                  src="{{ url_for('static', filename='Zandu Punarnava Mandur (40tab) - Melanoma.webp') }}"
+                  alt="Zandu Punarnava Mandur (40tab) - Melanoma"
+              />
+              <h2>Zandu Punarnava Mandur - Melanoma</h2>
+              <p>Price: Rs. 139</p>
+              <button>Add to Cart</button>
+          </div>
+          <div class="product-card" data-name="ZYMADERM Molluscum Contagiosum">
+              <img
+                  src="{{ url_for('static', filename='ZYMADERM Molluscum Contagiosum.webp') }}"
+                  alt="ZYMADERM Molluscum Contagiosum"
+              />
+              <h2>ZYMADERM Molluscum Contagiosum - Warts Molluscum</h2>
+              <p>Price: Rs. 219
+              <button>Add to Cart</button>
+        </section>
+        <div class="cart-message" id="cart-message">Product added to cart!</div>
+    </main>
+
+    <script>
+      function getQueryParameter(name) {
+          const urlParams = new URLSearchParams(window.location.search);
+          return urlParams.get(name);
+      }
+  
+      function findProductsByDisease(disease) {
+          const products = {
+              disease1: {
+                  id: "1",
+                  name: "Disease 1 Product",
+                  price: 500.0,
+                  imgs: ["/static/a2.jpg"],
+              },
+              disease2: {
+                  id: "2",
+                  name: "Disease 2 Product",
+                  price: 600.0,
+                  imgs: ["/static/disease2.jpg"],
+              },
+              disease3: {
+                  id: "3",
+                  name: "Disease 3 Product",
+                  price: 700.0,
+                  imgs: ["/static/disease3.jpg"],
+              },
+              disease4: {
+                  id: "4",
+                  name: "Disease 4 Product",
+                  price: 800.0,
+                  imgs: [ "/static/d2.webp"],
+              },
+              disease5: {
+                  id: "5",
+                  name: "Disease 5 Product",
+                  price: 900.0,
+                  imgs: [ "/static/g2.webp"],
+              },
+          };
+  
+          return products[disease] || {};
+      }
+  
+      function displayProducts(products) {
+          const productGrid = document.getElementById("products");
+          productGrid.innerHTML = ""; // Clear existing content
+  
+          if (products.imgs && products.imgs.length > 0) {
+              products.imgs.forEach((imgSrc, index) => {
+                  const productCard = document.createElement("div");
+                  productCard.className = "product-card";
+  
+                  const productImg = document.createElement("img");
+                  productImg.src = imgSrc;
+                  productImg.alt = `Product Image ${index + 1}`;
+                  productCard.appendChild(productImg);
+  
+                  const productTitle = document.createElement("h2");
+                  productTitle.textContent = products.name;
+                  productCard.appendChild(productTitle);
+  
+                  const productPrice = document.createElement("p");
+                  productPrice.textContent = `Price: Rs. ${products.price}`;
+                  productCard.appendChild(productPrice);
+  
+                  const buyButton = document.createElement("button");
+                  buyButton.textContent = "Add to Cart";
+                  productCard.appendChild(buyButton);
+  
+                  productGrid.appendChild(productCard);
+              });
+          }
+      }
+  
+      document.addEventListener("DOMContentLoaded", function () {
+          const disease = getQueryParameter("disease");
+          const className = getQueryParameter("class_name");
+  
+          if (disease) {
+              const products = findProductsByDisease(disease);
+              displayProducts(products);
+          }
+  
+          if (className) {
+              const searchInput = document.getElementById("searchBar");
+              searchInput.value = className;
+              searchInput.dispatchEvent(new Event('input')); 
+          }
+      });
+  
+      const searchInput = document.getElementById("searchBar");
+      searchInput.addEventListener("input", function () {
+          const searchValue = searchInput.value.toLowerCase();
+          const productCards = document.querySelectorAll(".product-card");
+  
+          productCards.forEach(card => {
+              const productName = card.querySelector("h2").textContent.toLowerCase();
+              card.style.display = productName.includes(searchValue) ? "block" : "none";
+          });
+      });
+  
+      document.addEventListener('click', function (e) {
+    if (e.target && e.target.tagName === 'BUTTON') {
+        const button = e.target;
+        const productCard = button.closest('.product-card');
+        const productName = productCard.querySelector('h2').textContent;
+        const productPrice = productCard.querySelector('p').textContent.replace('Price: Rs. ', '');
+
+        fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: productName, price: productPrice })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'Item added to cart') {
+                const cartMessage = document.getElementById('cart-message');
+                cartMessage.textContent = 'Product added to cart!';
+                
+                cartMessage.classList.remove('hide');
+                cartMessage.classList.add('show');
+                
+                setTimeout(() => {
+                    cartMessage.classList.remove('show');
+                    cartMessage.classList.add('hide');
+                }, 3000); // Hide message after 3 seconds
+            }
+        })
+        .catch(error => console.error('Error adding item to cart:', error));
+    }
+});
+
+    
+  </script>
+  
+</body>
+</html>

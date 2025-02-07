@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Health Remedies</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='stylcss/remedies.css') }}"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #e0f2e9; /* Light green background */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1em 2em;
+        background: rgba(0, 0, 0, 0.7);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 10;
+      }
+
+      .navbar .logo img {
+        height: 50px;
+      }
+
+      .navbar .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 1em;
+        margin: 0;
+        padding: 0;
+      }
+
+      .navbar .nav-links li {
+        display: inline;
+      }
+
+      .navbar .nav-links a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1.2em;
+        transition: color 0.3s;
+        padding: 0.5em 1em;
+      }
+
+      .navbar .nav-links a:hover {
+        color: #ffd700; /* Bright yellow */
+      }
+
+      .profile-circle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #007bff; /* Blue background */
+        color: white;
+        font-size: 16px;
+        margin-left: 10px; /* Adjust margin as needed */
+      }
+
+      .profile-circle:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+      }
+
+      .navbar .profile-circle a {
+        color: white;
+        text-decoration: none;
+      }
+
+      .navbar .profile-circle a:hover {
+        text-decoration: underline;
+      }
+
+      .navbar .cart a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5em 1em;
+        border: 2px solid #ffd700; /* Bright yellow border */
+        border-radius: 5px;
+        transition: background-color 0.3s, transform 0.3s;
+        height: 50px;
+      }
+
+      .navbar .cart a:hover {
+        background-color: #ffd700; /* Bright yellow background */
+        transform: scale(1.1);
+      }
+
+      .navbar .cart img {
+        height: 100%;
+        width: auto;
+      }
+
+      .header {
+        width: 100%;
+        background-color: #3b945e; /* Dark green header */
+        padding: 20px 0;
+        border-bottom: 1px solid #2e7049; /* Dark green border */
+        display: flex;
+        justify-content: center;
+        margin-top: 100px; /* Space below navbar */
+      }
+
+      .search-container {
+        display: flex;
+        width: 50%;
+      }
+
+      .search-bar {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #2e7049; /* Dark green border */
+        border-radius: 4px;
+        outline: none;
+      }
+
+      .container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        width: 90%;
+        max-width: 1200px;
+        margin-top: 20px;
+      }
+
+      .box {
+        background-color: #ffffff; /* White box background */
+        border: 1px solid #b0eacd; /* Light green border */
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .box h2 {
+        margin-top: 0;
+        font-size: 1.5em;
+        color: #3b945e; /* Dark green text */
+      }
+
+      .description {
+        background-color: #f0f9f4; /* Lighter green background for description */
+        border-top: 1px solid #b0eacd; /* Light green border */
+        padding: 10px;
+        margin-top: 10px;
+        font-size: 0.9em;
+        color: #333; /* Dark text */
+      }
+
+      .details {
+        display: none;
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #f0f9f4; /* Lighter green background for details */
+        border-top: 1px solid #b0eacd; /* Light green border */
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+      }
+
+      .remedy {
+        margin-bottom: 20px;
+        padding: 15px 20px;
+        border-left: 1px solid #b0eacd; /* Light green border */
+      }
+
+      .remedy:first-child {
+        border-left: none;
+      }
+
+      .remedy h3 {
+        margin-top: 0;
+        color: #3b945e; /* Dark green heading */
+      }
+
+      .remedy ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      .box.expanded {
+        grid-column: span 2;
+        transform: scale(1.03);
+        border: 2px solid #3b945e; /* Dark green border */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .box.expanded .details {
+        display: block;
+      }
+    </style>
+    <nav class="navbar">
+      <div class="logo">
+        <img
+          src="{{ url_for('static', filename='logo.png') }}"
+          alt="Ayurvedic Logo"
+        />
+      </div>
+      <ul class="nav-links">
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('products') }}">Products</a></li>
+        <li><a href="{{ url_for('remedies') }}">Remedies</a></li>
+        <li><a href="{{ url_for('qa') }}">Chat us</a></li>
+        <li><a href="{{ url_for('contact') }}">Skin Click</a></li>
+        {% if 'user' in session %}
+        <div class="profile-circle">
+          <a href="{{ url_for('profile') }}">{{ session['user'][0] }}</a>
+        </div>
+        {% else %}
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        <li><a href="{{ url_for('signup') }}">Sign up</a></li>
+        {% endif %}
+      </ul>
+      <div class="cart">
+        <a href="{{ url_for('cart') }}">
+          <img
+            src="{{ url_for('static', filename='cart-icon.png') }}"
+            alt="Cart"
+          />
+        </a>
+      </div>
+    </nav>
+  </head>
+  <body>
+    <header class="header">
+      <div class="search-container">
+        <input
+          type="text"
+          class="search-bar"
+          id="searchBar"
+          placeholder="Search for a remedy..."
+        />
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="box" data-class="Melanoma">
+        <h2>Melanoma</h2>
+        <div class="description">
+          Symptoms: Changes in existing moles, development of new pigmented or
+          unusual-looking growths on your skin.
+        </div>
+        <div class="details">
+          <div class="remedy">
+            <h3>Remedy 1: Green Tea Extract</h3>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              <li>Green tea extract</li>
+            </ul>
+            <p><strong>Usage:</strong> Apply green tea extract topically.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box" data-class="Atopic Dermatitis">
+        <h2>Atopic Dermatitis</h2>
+        <div class="description">Symptoms: Red, itchy, and swollen skin.</div>
+        <div class="details">
+          <div class="remedy">
+            <h3>Remedy 1: Coconut Oil</h3>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              <li>Coconut oil</li>
+            </ul>
+            <p>
+              <strong>Usage:</strong> Apply coconut oil to the affected areas.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box" data-class="Acne">
+        <h2>Acne</h2>
+        <div class="description">Symptoms: Pimples, oily skin, blackheads.</div>
+        <div class="details">
+          <div class="remedy">
+            <h3>Remedy 1: Tea Tree Oil</h3>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              <li>Tea tree oil</li>
+            </ul>
+            <p>
+              <strong>Usage:</strong> Apply diluted tea tree oil to affected
+              areas.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box" data-class="Eczema">
+        <h2>Eczema</h2>
+        <div class="description">
+          Symptoms: Dry, itchy, red, and inflamed skin.
+        </div>
+        <div class="details">
+          <div class="remedy">
+            <h3>Remedy 1: Oatmeal Bath</h3>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              <li>Colloidal oatmeal</li>
+            </ul>
+            <p>
+              <strong>Usage:</strong> Take an oatmeal bath or apply oatmeal
+              paste.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="box" data-class="Atopic Dermatitis">
+        <h2>Atopic Dermatitis</h2>
+        <div class="description">Symptoms: Red, itchy, and swollen skin.</div>
+        <div class="details">
+            <div class="remedy">
+                <h3>Remedy 1: Coconut Oil</h3>
+                <p><strong>Ingredients:</strong></p>
+                <ul>
+                    <li>Coconut oil</li>
+                </ul>
+                <p><strong>Usage:</strong> Apply coconut oil to the affected areas.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="box" data-class="Melanocytic Nevi">
+        <h2>Melanocytic Nevi</h2>
+        <div class="description">Symptoms: Dark brown or black moles on the skin.</div>
+        <div class="details">
+            <div class="remedy">
+                <h3>Remedy 1: Turmeric and Honey</h3>
+                <p><strong>Ingredients:</strong></p>
+                <ul>
+                    <li>Turmeric powder</li>
+                    <li>Honey</li>
+                </ul>
+                <p><strong>Usage:</strong> Mix turmeric powder with honey and apply to the moles.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="box" data-class="Tinea Ringworm Candidiasis">
+        <h2>Tinea Ringworm Candidiasis</h2>
+        <div class="description">Symptoms: Itchy, red, ring-shaped rashes.</div>
+        <div class="details">
+            <div class="remedy">
+                <h3>Remedy 1: Neem Oil</h3>
+                <p><strong>Ingredients:</strong></p>
+                <ul>
+                    <li>Neem oil</li>
+                </ul>
+                <p><strong>Usage:</strong> Apply neem oil to the affected areas.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="box" data-class="Basal Cell Carcinoma">
+        <h2>Basal Cell Carcinoma</h2>
+        <div class="description">Symptoms: Pearly or waxy bump, flat, flesh-colored or brown scar-like lesion.</div>
+        <div class="details">
+            <div class="remedy">
+                <h3>Remedy 1: Aloe Vera</h3>
+                <p><strong>Ingredients:</strong></p>
+                <ul>
+                    <li>Aloe vera gel</li>
+                </ul>
+                <p><strong>Usage:</strong> Apply aloe vera gel to the affected areas daily.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="box" data-class="Benign Keratosis">
+        <h2>Benign Keratosis</h2>
+        <div class="description">Symptoms: Thick, scaly, or crusty patches of skin.</div>
+        <div class="details">
+            <div class="remedy">
+                <h3>Remedy 1: Castor Oil</h3>
+                <p><strong>Ingredients:</strong></p>
+                <ul>
+                    <li>Castor oil</li>
+                </ul>
+                <p><strong>Usage:</strong> Apply castor oil to the keratosis patches twice daily.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="box" data-class="Warts Molluscum">
+        <h2>Warts Molluscum</h2>
+        <div class="description">Symptoms: Small, flesh-colored, or pink, grainy bumps.</div>
+        <div class="details">
+            <div class="remedy">
+                <h3>Remedy 1: Apple Cider Vinegar</h3>
+                <p><strong>Ingredients:</strong></p>
+                <ul>
+                    <li>Apple cider vinegar</li>
+                    <li>Cotton ball</li>
+                    <li>Bandaid</li>
+                </ul>
+                <p><strong>Usage:</strong> Soak a cotton ball in apple cider vinegar, place it on the wart, and cover it with a bandaid overnight.</p>
+            </div>
+        </div>
+    </div>
+    <div class="box" data-class="Seborrheic Keratoses">
+      <h2>Seborrheic Keratoses</h2>
+      <div class="description">Symptoms: Rough, scaly, or wart-like growths that are typically brown, black, or light tan.</div>
+      <div class="details">
+          <div class="remedy">
+              <h3>Remedy 1: Lemon Juice and Honey</h3>
+              <p><strong>Ingredients:</strong></p>
+              <ul>
+                  <li>Lemon juice</li>
+                  <li>Honey</li>
+              </ul>
+              <p><strong>Usage:</strong> Mix lemon juice with honey and apply to the affected areas. Leave it on for 15-20 minutes before washing off. Repeat daily.</p>
+          </div>
+      </div>
+  </div>
+  
+      <div class="box" data-class="Psoriasis">
+        <h2>Psoriasis</h2>
+        <div class="description">Symptoms: Red, inflamed patches of skin.</div>
+        <div class="details">
+          <div class="remedy">
+            <h3>Remedy 1: Aloe Vera</h3>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              <li>Aloe vera gel</li>
+            </ul>
+            <p>
+              <strong>Usage:</strong> Apply aloe vera gel directly to affected
+              areas.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box" data-class="Rosacea">
+        <h2>Rosacea</h2>
+        <div class="description">
+          Symptoms: Redness, visible blood vessels, and small, red, pus-filled
+          bumps on the face.
+        </div>
+        <div class="details">
+          <div class="remedy">
+            <h3>Remedy 1: Chamomile</h3>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              <li>Chamomile extract</li>
+            </ul>
+            <p>
+              <strong>Usage:</strong> Apply chamomile extract topically or use
+              chamomile tea as a compress.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box" data-class="Dandruff">
+        <h2>Dandruff</h2>
+        <div class="description">Symptoms: Flaky, itchy scalp.</div>
+        <div class="details">
+          <div class="remedy">
+            <h3>Remedy 1: Apple Cider Vinegar Rinse</h3>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              <li>Apple cider vinegar</li>
+            </ul>
+            <p>
+              <strong>Usage:</strong> Rinse scalp with diluted apple cider
+              vinegar after shampooing.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box" data-class="Sunburn">
+        <h2>Sunburn</h2>
+        <div class="description">
+          Symptoms: Red, painful skin due to overexposure to UV rays.
+        </div>
+        <div class="details">
+          <div class="remedy">
+            <h3>Remedy 1: Aloe Vera Gel</h3>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              <li>Aloe vera gel</li>
+            </ul>
+            <p>
+              <strong>Usage:</strong> Apply aloe vera gel to affected areas for
+              soothing relief.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box" data-class="Athlete's Foot">
+        <h2>Athlete's Foot</h2>
+        <div class="description">
+          Symptoms: Itchy, cracked, and peeling skin, usually between the toes.
+        </div>
+        <div class="details">
+          <div class="remedy">
+            <h3>Remedy 1: Tea Tree Oil</h3>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              <li>Tea tree oil</li>
+            </ul>
+            <p>
+              <strong>Usage:</strong> Apply diluted tea tree oil to affected
+              areas.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box" data-class="Cold Sores">
+        <h2>Cold Sores</h2>
+        <div class="description">
+          Symptoms: Small blisters around the lips or mouth.
+        </div>
+        <div class="details">
+          <div class="remedy">
+            <h3>Remedy 1: Ice Pack</h3>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              <li>Ice pack or cold compress</li>
+            </ul>
+            <p>
+              <strong>Usage:</strong> Apply ice pack to affected area to reduce
+              swelling and pain.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box" data-class="Headaches">
+        <h2>Headaches</h2>
+        <div class="description">Symptoms: Pain in head or neck area.</div>
+        <div class="details">
+          <div class="remedy">
+            <h3>Remedy 1: Peppermint Oil</h3>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              <li>Peppermint essential oil</li>
+            </ul>
+            <p>
+              <strong>Usage:</strong> Apply diluted peppermint oil to temples
+              and forehead.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box" data-class="Insomnia">
+        <h2>Insomnia</h2>
+        <div class="description">
+          Symptoms: Difficulty falling asleep or staying asleep.
+        </div>
+        <div class="details">
+          <div class="remedy">
+            <h3>Remedy 1: Lavender Oil</h3>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              <li>Lavender essential oil</li>
+            </ul>
+            <p>
+              <strong>Usage:</strong> Diffuse lavender oil in the bedroom or
+              apply to pillow.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box" data-class="Indigestion">
+        <h2>Indigestion</h2>
+        <div class="description">
+          Symptoms: Discomfort or pain in the upper abdomen.
+        </div>
+        <div class="details">
+          <div class="remedy">
+            <h3>Remedy 1: Ginger Tea</h3>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              <li>Fresh ginger root</li>
+              <li>Hot water</li>
+            </ul>
+            <p>
+              <strong>Usage:</strong> Steep ginger in hot water, drink slowly.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box" data-class="Sinusitis">
+        <h2>Sinusitis</h2>
+        <div class="description">
+          Symptoms: Congestion, facial pain or pressure, nasal discharge.
+        </div>
+        <div class="details">
+          <div class="remedy">
+            <h3>Remedy 1: Steam Inhalation</h3>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              <li>Hot water</li>
+              <li>Eucalyptus or peppermint oil (optional)</li>
+            </ul>
+            <p>
+              <strong>Usage:</strong> Inhale steam from hot water to relieve
+              congestion.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function toggleDetails(element) {
+        const details = element.querySelector(".details");
+        const isActive = element.classList.contains("expanded");
+    
+        // Close all boxes first
+        const allBoxes = document.querySelectorAll(".box");
+        allBoxes.forEach((box) => {
+          box.classList.remove("expanded");
+          box.querySelector(".details").style.display = "none";
+        });
+    
+        // Then toggle the clicked box
+        if (!isActive) {
+          details.style.display = "block";
+          element.classList.add("expanded");
+        } else {
+          details.style.display = "none";
+          element.classList.remove("expanded");
+        }
+      }
+    
+      document.querySelectorAll(".box").forEach((box) => {
+        box.addEventListener("click", () => {
+          toggleDetails(box);
+        });
+      });
+    
+      // Function to filter remedies based on search input
+      function filterRemedies() {
+        const searchValue = document.getElementById("searchBar").value.toLowerCase();
+        const remedyBoxes = document.querySelectorAll(".box");
+    
+        remedyBoxes.forEach((box) => {
+          const title = box.querySelector("h2").textContent.toLowerCase();
+          const description = box.querySelector(".description").textContent.toLowerCase();
+          
+          if (title.includes(searchValue) || description.includes(searchValue)) {
+            box.style.display = "";
+          } else {
+            box.style.display = "none";
+            box.classList.remove("expanded");
+            box.querySelector(".details").style.display = "none";
+          }
+        });
+      }
+    
+      // Event listener for search input
+      document.getElementById("searchBar").addEventListener("input", filterRemedies);
+    
+      // Function to get query parameters from URL
+      function getQueryParams() {
+        const params = {};
+        const queryString = window.location.search.substring(1);
+        const pairs = queryString.split("&");
+        pairs.forEach((pair) => {
+          const [key, value] = pair.split("=");
+          params[decodeURIComponent(key)] = decodeURIComponent(value);
+        });
+        return params;
+      }
+    
+      // Set the search bar with the class_name parameter and filter remedies
+      window.onload = function () {
+        const params = getQueryParams();
+        if (params.class_name) {
+          const searchBar = document.getElementById("searchBar");
+          searchBar.value = params.class_name;
+          filterRemedies();
+        }
+      };
+    
+      // Display all remedies by default
+      filterRemedies();
+    </script>
+    
+   </body>
+</html>

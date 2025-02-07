@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ayurvedic Application</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='stylcss/styles.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="logo">
+          <img
+            src="{{ url_for('static', filename='logo.png') }}"
+            alt="Ayurvedic Logo"
+          />
+        </div>
+        <ul class="nav-links">
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('products') }}">Products</a></li>
+          <li><a href="{{ url_for('remedies') }}">Remedies</a></li>
+          <li><a href="{{ url_for('qa') }}">Chat us</a></li>
+          <li><a href="{{ url_for('contact') }}">Skin Click</a></li>
+          {% if 'user' in session %}
+         
+          <div class="profile-circle">
+            <a href="{{ url_for('profile') }}">{{ session['user'][0] }}</a>
+          </div>
+
+          {% else %}
+          <li><a href="{{ url_for('login') }}">Login</a></li>
+          <li><a href="{{ url_for('signup') }}">Sign up</a></li>
+          {% endif %}
+        </ul>
+        
+        <div class="cart">
+          <a href="{{ url_for('cart') }}">
+            <img
+              src="{{ url_for('static', filename='cart-icon.png') }}"
+              alt="Cart"
+            />
+          </a>
+        </div>
+      </nav>
+      <div class="video-container">
+        <video autoplay muted loop id="bg-video">
+          <source
+            src="{{ url_for('static', filename='background-video.mp4') }}"
+            type="video/mp4"
+          />
+        </video>
+        <div class="overlay"></div>
+        <div class="content">
+          <h1>Welcome to Ayurvedic Application</h1>
+          <p>Discover the best herbs and remedies for your health</p>
+          <p>
+            Ayurveda is such an industry where immense numbers of raw materials
+            are consumed for production of various<br />
+            classical as well as proprietary medicines, namely herbal origin,<br />
+            animal origin, metals & minerals and other items like packing
+            materials, excipients etc.
+          </p>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section class="image-gallery">
+        <h2>Our Products</h2>
+        <div class="image-grid">
+          <img
+            src="{{ url_for('static', filename='disease1.jpg') }}"
+            alt="Disease 1"
+            onclick="redirectToDisease('disease1')"
+          />
+          <img
+            src="{{ url_for('static', filename='disease2.jpg') }}"
+            alt="Disease 2"
+            onclick="redirectToDisease('disease2')"
+          />
+          <img
+            src="{{ url_for('static', filename='disease3.jpg') }}"
+            alt="Disease 3"
+            onclick="redirectToDisease('disease3')"
+          />
+          <img
+            src="{{ url_for('static', filename='disease4.jpg') }}"
+            alt="Disease 4"
+            onclick="redirectToDisease('disease4')"
+          />
+          <img
+            src="{{ url_for('static', filename='disease5.jpg') }}"
+            alt="Disease 5"
+            onclick="redirectToDisease('disease5')"
+          />
+        </div>
+      </section>
+      <section class="categories">
+        <div class="image-gallery text-center">
+          <h2>Popular Aspects</h2>
+        </div>
+        <div class="popular">
+          <div class="image-container">
+            <img
+              src="{{ url_for('static', filename='immunity.jpg') }}"
+              alt="Product 1"
+            />
+            <p>Immunity</p>
+          </div>
+          <div class="image-container">
+            <img
+              src="{{ url_for('static', filename='diadics.jpg') }}"
+              alt="Product 2"
+            />
+            <p>Diabetes</p>
+          </div>
+          <div class="image-container">
+            <img
+              src="{{ url_for('static', filename='fittness.jpg') }}"
+              alt="Product 3"
+            />
+            <p>Fitness</p>
+          </div>
+          <div class="image-container">
+            <img
+              src="{{ url_for('static', filename='pain.jpg') }}"
+              alt="Product 4"
+            />
+            <p>Pain Relief</p>
+          </div>
+          <div class="image-container">
+            <img
+              src="{{ url_for('static', filename='skincare.jpg') }}"
+              alt="Product 5"
+            />
+            <p>Skincare</p>
+          </div>
+        </div>
+      </section>
+      <section class="feedback-form">
+        <h2>Feedback Form</h2>
+        <form>
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required />
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+          <label for="feedback">Feedback:</label>
+          <textarea id="feedback" name="feedback" required></textarea>
+          <button type="submit">Submit</button>
+        </form>
+      </section>
+    </main>
+    <div class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="footer-col-1">
+            <h3>Download Our App</h3>
+            <div class="app-logo">
+              <img src="{{ url_for('static', filename='playstore.webp') }}" />
+              <img src="{{ url_for('static', filename='appstore.jpeg') }}" />
+            </div>
+          </div>
+          <div class="footer-col-2">
+            <img src="" />
+            <p>Download App for Android and iOS mobile phone.</p>
+          </div>
+          <div class="footer-col-3">
+            <h3>Useful Links</h3>
+            <ul>
+              <li>Coupons</li>
+              <li>Blog Post</li>
+              <li>Return Policy</li>
+              <li>Join Affiliate</li>
+            </ul>
+          </div>
+          <div class="footer-col-4">
+            <h3>Follow us</h3>
+            <ul>
+              <li>Facebook</li>
+              <li>Twitter</li>
+              <li>Instagram</li>
+              <li>YouTube</li>
+            </ul>
+          </div>
+        </div>
+        <hr />
+        <p class="Copyright">Copyright 2024</p>
+      </div>
+    </div>
+    <script>
+      function redirectToDisease(disease) {
+        window.location.href = "{{ url_for('products') }}?disease=" + disease;
+      }
+    </script>
+  </body>
+</html>

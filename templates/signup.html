@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup</title>
+    <link rel="stylesheet" href="/static/stylcss/forms-styles.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="logo">
+          <img
+            src="{{ url_for('static', filename='logo.png') }}"
+            alt="Ayurvedic Logo"
+          />
+        </div>
+        <ul class="nav-links">
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('products') }}">Products</a></li>
+          <li><a href="{{ url_for('remedies') }}">Remedies</a></li>
+          <li><a href="{{ url_for('qa') }}">Chat Us</a></li>
+          <li><a href="{{ url_for('contact') }}">Skin Click</a></li>
+          <li><a href="{{ url_for('login') }}">Login</a></li>
+          <li><a href="{{ url_for('signup') }}">Sign up</a></li>
+        </ul>
+        <div class="cart">
+          <a href="{{ url_for('cart') }}">
+            <img
+              src="{{ url_for('static', filename='cart-icon.png') }}"
+              alt="Cart"
+            />
+          </a>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <div class="form-container">
+        <h2>Signup</h2>
+        <form id="signup-form">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required />
+
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+
+          <button type="submit">Signup</button>
+        </form>
+      </div>
+    </main>
+    <script>
+      document
+        .getElementById("signup-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          fetch("{{ url_for('signup') }}", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name, email, password }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              alert(data.message);
+              if (data.user) {
+                window.location.href = "{{ url_for('login') }}";
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
+    </script>
+  </body>
+</html>

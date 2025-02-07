@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='stylcss/profile.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="logo">
+          <img
+            src="{{ url_for('static', filename='logo.png') }}"
+            alt="Ayurvedic Logo"
+          />
+        </div>
+        <ul class="nav-links">
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('products') }}">Products</a></li>
+          <li><a href="{{ url_for('remedies') }}">Remedies</a></li>
+          <li><a href="{{ url_for('qa') }}">Chat Us</a></li>
+          <li><a href="{{ url_for('contact') }}">Skin Click</a></li>
+          {% if 'user' in session %}
+          <li><a href="{{ url_for('profile') }}">{{ session['user'] }}</a></li>
+          {% else %}
+          <li><a href="{{ url_for('login') }}">Login</a></li>
+          <li><a href="{{ url_for('signup') }}">Sign up</a></li>
+          {% endif %}
+        </ul>
+        <div class="cart">
+          <a href="{{ url_for('cart') }}">
+            <img
+              src="{{ url_for('static', filename='cart-icon.png') }}"
+              alt="Cart"
+            />
+          </a>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <section class="profile-section">
+        <h2>Welcome, {{ user }}</h2>
+        <p>This is your profile page.</p>
+        <a href="{{ url_for('logout') }}">Logout</a>
+        <div class="activity-section">
+          <h3>Your Questions</h3>
+          <ul>
+            {% for question in user_questions %}
+            <li>
+              <strong>{{ question['title'] }}</strong><br />
+              {{ question['body'] }}<br />
+              <em>Tags: {{ ', '.join(question['tags']) }}</em>
+            </li>
+            {% endfor %}
+          </ul>
+
+          <h3>Your Answers</h3>
+          <ul>
+            {% for answer in user_answers %}
+            <li>
+              <strong>Question: {{ answer['question_title'] }}</strong><br />
+              {{ answer['body'] }}
+            </li>
+            {% endfor %}
+          </ul>
+
+          <h3>Your Cart Items</h3>
+          <ul>
+            {% for item in cart_items %}
+            <li>
+              <strong>{{ item['product_name'] }}</strong><br />
+              Price: {{ item['price'] }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

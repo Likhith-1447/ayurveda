@@ -1,0 +1,53 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: pink;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+}
+
+.box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    width: 80%;
+    max-width: 500px;
+}
+
+#upload-box h1 {
+    color: greenyellow;
+}
+
+#prediction-box h1 {
+    color: greenyellow;
+}
+
+#imageUpload {
+    margin: 20px 0;
+    background-color: yellow;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#input-image {
+    margin-top: 10px;
+    width: 100%;
+    height: auto;
+    border: 2px solid greenyellow;
+    border-radius: 10px;
+}
+
+#prediction {
+    margin-top: 20px;
+    font-size: 18px;
+}

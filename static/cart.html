@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart</title>
+    <link rel="stylesheet" href="cart.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="logo">
+          <img src="logo.png" alt="Ayurvedic Logo" />
+        </div>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="#remedies">Remedies</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="signup.html">Sign up</a></li>
+        </ul>
+        <div class="cart">
+          <a href="cart.html">
+            <img src="cart-icon.png" alt="Cart" />
+          </a>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <section class="cart-container">
+        <h2>Your Cart</h2>
+        <div class="cart-list" id="cart-list">
+          <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="cart-total">
+          Total: ₹ <span id="cart-total-value">0.00</span>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+      <div class="footer">
+        <div class="container">
+          <div class="row">
+            <div class="footer-col-1">
+              <h3>Download Our app</h3>
+
+              <div class="app-logo">
+                <img src="playstore.jpg" />
+                <img src="appstore.jpg" />
+              </div>
+            </div>
+            <div class="footer-col-2">
+              <img src="" />
+              <p>Download App for Anroid and ios mobile phone.</p>
+            </div>
+            <div class="footer-col-3">
+              <h3>Useful Links</h3>
+              <ul>
+                <li>Coupons</li>
+                <li>Blog Post</li>
+                <li>Return Policy</li>
+                <li>Join Affliate</li>
+              </ul>
+            </div>
+            <div class="footer-col-4">
+              <h3>Follow us</h3>
+              <ul>
+                <li>Facebook</li>
+                <li>Twitter</li>
+                <li>Instagram</li>
+                <li>Youtube</li>
+              </ul>
+            </div>
+          </div>
+          <hr />
+          <p class="Copyright">CopyRight 2024</p>
+        </div>
+      </div>
+    </footer>
+    <script>
+      // Function to display cart items from localStorage
+      function displayCartItems() {
+        const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+        const cartList = document.getElementById("cart-list");
+        const cartTotalValue = document.getElementById("cart-total-value");
+        let totalCost = 0;
+
+        cartList.innerHTML = ""; // Clear existing items
+
+        cartItems.forEach((item, index) => {
+          const cartItemElement = document.createElement("div");
+          cartItemElement.classList.add("cart-item");
+          cartItemElement.innerHTML = `
+                    <div class="item-details">
+                        <h3>${item.name}</h3>
+                        <p>Price: ₹${item.price.toFixed(2)}</p>
+                        <button class="remove-button" onclick="removeFromCart(${index})">Remove</button>
+                    </div>
+                `;
+          cartList.appendChild(cartItemElement);
+          totalCost += item.price;
+        });
+
+        cartTotalValue.textContent = totalCost.toFixed(2);
+      }
+
+      // Function to remove item from cart
+      function removeFromCart(index) {
+        let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+        cartItems.splice(index, 1); // Remove item at specified index
+        localStorage.setItem("cartItems", JSON.stringify(cartItems)); // Update localStorage
+        displayCartItems(); // Refresh cart display
+      }
+
+      // Call displayCartItems on page load
+      document.addEventListener("DOMContentLoaded", displayCartItems);
+    </script>
+  </body>
+</html>

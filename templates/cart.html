@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylcss/cart.css') }}" />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="logo">
+          <img src="/static/logo.png" alt="Ayurvedic Logo" />
+        </div>
+        <ul class="nav-links">
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('products') }}">Products</a></li>
+          <li><a href="{{ url_for('remedies') }}">Remedies</a></li>
+          <li><a href="{{ url_for('contact') }}">Image</a></li>
+          {% if 'user' in session %}
+            <div class="profile-circle">
+              <a href="{{ url_for('profile') }}">{{ session['user'] }}</a>
+            </div>
+          {% else %}
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+            <li><a href="{{ url_for('signup') }}">Sign up</a></li>
+          {% endif %}
+        </ul>
+        <div class="cart">
+          <a href="{{ url_for('cart') }}">
+            <img src="/static/cart-icon.png" alt="Cart" />
+          </a>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <section class="cart-container">
+        <h2>Your Cart</h2>
+        <div class="cart-list" id="cart-list">
+          {% for item in cart_items %}
+            <div class="cart-item" data-id="{{ item[0] }}">
+              <div class="item-details">
+                <h3>{{ item[2] }}</h3>
+                <p>Price: ₹{{ item[3] }}</p>
+                <button class="remove-button">Remove</button>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="cart-total">
+          Total: ₹ <span id="cart-total-value">0.00</span>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+      <div class="footer">
+        <div class="container">
+          <div class="row">
+            <div class="footer-col-1">
+              <h3>Download Our app</h3>
+              <div class="app-logo">
+                <img src="playstore.jpg" />
+                <img src="appstore.jpg" />
+              </div>
+            </div>
+            <div class="footer-col-2">
+              <img src="" />
+              <p>Download App for Anroid and ios mobile phone.</p>
+            </div>
+            <div class="footer-col-3">
+              <h3>Useful Links</h3>
+              <ul>
+                <li>Coupons</li>
+                <li>Blog Post</li>
+                <li>Return Policy</li>
+                <li>Join Affliate</li>
+              </ul>
+            </div>
+            <div class="footer-col-4">
+              <h3>Follow us</h3>
+              <ul>
+                <li>Facebook</li>
+                <li>Twitter</li>
+                <li>Instagram</li>
+                <li>Youtube</li>
+              </ul>
+            </div>
+          </div>
+          <hr />
+          <p class="Copyright">CopyRight 2024</p>
+        </div>
+      </div>
+    </footer>
+    <script>
+      // Function to display cart total
+      function displayCartTotal() {
+        const cartItems = document.querySelectorAll('.cart-item');
+        let totalCost = 0;
+
+        cartItems.forEach(item => {
+          const price = parseFloat(item.querySelector('.item-details p').innerText.replace('Price: ₹', ''));
+          totalCost += price;
+        });
+
+        document.getElementById('cart-total-value').innerText = totalCost.toFixed(2);
+      }
+
+      // Function to remove item from cart
+      function removeFromCart(event) {
+        const itemId = event.target.closest('.cart-item').getAttribute('data-id');
+        
+        fetch('/cart/remove', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ item_id: itemId }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === 'Item removed from cart') {
+            event.target.closest('.cart-item').remove();
+            displayCartTotal();
+          }
+        });
+      }
+
+      // Add event listeners for remove buttons
+      document.querySelectorAll('.remove-button').forEach(button => {
+        button.addEventListener('click', removeFromCart);
+      });
+
+      // Display cart total on page load
+      document.addEventListener('DOMContentLoaded', displayCartTotal);
+    </script>
+  </body>
+</html>

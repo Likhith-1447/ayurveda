@@ -1,0 +1,88 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #06070648;
+  padding: 10px 20px;
+}
+
+.navbar .logo img {
+  height: 50px;
+}
+
+.nav-links {
+  list-style: none;
+  padding: 0;
+}
+
+.nav-links li {
+  display: inline;
+  margin: 0 10px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+
+.cart img {
+  height: 30px;
+}
+
+.profile-section {
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-section h2 {
+  color: #4caf50;
+}
+
+.profile-section a {
+  text-decoration: none;
+  color: #4caf50;
+}
+
+.activity-section {
+  margin-top: 20px;
+}
+
+.activity-section h3 {
+  color: #4caf50;
+  border-bottom: 2px solid #4caf50;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.activity-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.activity-section li {
+  background-color: #f1f1f1;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.activity-section li strong {
+  display: block;
+  color: #333;
+}
+
+.activity-section li em {
+  color: #888;
+}
